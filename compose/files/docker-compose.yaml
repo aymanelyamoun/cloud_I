@@ -1,0 +1,72 @@
+version: '3'
+
+services:
+  mariadb:
+    # build: ./srcs/requirements/mariadb
+    image: my_mariadb
+    container_name: db
+    env_file: .env
+    restart: always
+    environment:
+      - DB_ROOT_PASS=DB_ROOT_P
+      - WORDPRESS_DB_NAME=$WORDPRESS_D
+      - WORDPRESS_USER=$WORDPRESS_U
+      - WORDPRESS_PASS=$WORDPRESS_P
+      - ADMIN_PASS=$ADMIN_P
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - all_connect
+  wordpress:
+    depends_on:
+      - mariadb
+    # build: ./srcs/requirements/wordpress
+    image: my_wordpress
+    container_name: my_wordpress
+    env_file: .env
+    restart: always
+    environment:
+      - WORDPRESS_DB_NAME=$WORDPRESS_D
+      - WORDPRESS_USER=$WORDPRESS_U
+      - WORDPRESS_PASS=$WORDPRESS_P
+      - ADMIN_PASS=$ADMIN_P
+      - DB_HOST=db
+      - USER_PASS=$USER_P
+      - ADMIN_USER_NAME=fine
+      - ADMIN_USER_MAIL=fakemail@gmail.com
+      - USER_MAIL=usermail@gmail.com
+      - USER_NAME=fuser
+    volumes:
+      - wordpress:/var/www/wordpress
+    networks:
+      - all_connect
+  nginx:
+    depends_on:
+      - wordpress
+    # build: ./srcs/requirements/nginx
+    image: my_nginx
+    container_name: website
+    restart: always
+    ports:
+      - 443:443
+    volumes:
+      - ${DATA_PATH}/wordpress:/var/www/wordpress
+    networks:
+      - all_connect
+
+volumes:
+  volumes:
+  wordpress:
+    driver_opts:
+      type: none
+      device: ${DATA_PATH}/wordpress
+      o: bind
+  dbdata:
+    driver_opts:
+      type: none
+      device: ${DATA_PATH}/mariadb
+      o: bind
+
+networks:
+  all_connect:
+    driver: bridge

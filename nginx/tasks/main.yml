@@ -1,0 +1,25 @@
+---
+# tasks file for nginx
+- name: Create destination
+  file:
+    path: /tmp/nginx
+    state: directory
+    mode: "0755"
+- name: Copy nginx assets
+  ansible.builtin.copy:
+    src: "assets"
+    dest: "/tmp/nginx"
+# - name: add execute permessions to scripts
+#   ansible.builtin.file:
+#     path: /tmp/nginx/assets/nginx_setup.sh
+#     mode: "0755"
+- name: Copy nginx Dockerfile
+  ansible.builtin.copy:
+    src: "Dockerfile"
+    dest: /tmp/nginx
+- name: building nginx image
+  community.docker.docker_image:
+    name: my_nginx
+    build:
+      path: /tmp/nginx
+    source: build

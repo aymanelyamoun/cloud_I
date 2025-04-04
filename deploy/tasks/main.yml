@@ -1,0 +1,16 @@
+---
+# tasks file for deploy
+- name: Clone repository from GitHub
+  ansible.builtin.git:
+    repo: 'https://github.com/aymanelyamoun/new_inception.git'
+    dest: '/inception'
+    version: 'master'
+    force: yes
+- name: Ensure Docker SDK is installed
+  pip:
+    name: docker
+    state: present
+- name: Run Docker Compose up (build and start containers)
+  community.docker.docker_compose_v2:
+    project_src: "/inception"
+    state: "present"

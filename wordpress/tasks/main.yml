@@ -1,0 +1,17 @@
+---
+# tasks file for wordpress
+- name: Copy wordpress setup script
+  ansible.builtin.copy:
+    src: "set_up.sh"
+    dest: /tmp/wordpress/
+    mode: "0755"
+- name: Copy wordpress Dockerfile
+  ansible.builtin.copy:
+    src: "Dockerfile"
+    dest: /tmp/wordpress/
+- name: build wordpress image
+  community.docker.docker_image:
+    name: my_wordpress
+    build:
+      path: /tmp/wordpress
+    source: build

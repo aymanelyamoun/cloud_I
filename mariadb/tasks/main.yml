@@ -1,0 +1,17 @@
+---
+# tasks file for mariadb
+# - name C
+- name: Copying mariadb assest
+  ansible.builtin.copy:
+    src: "assets"
+    dest: /tmp/mariadb
+- name: Copying mariadb dockerfile
+  ansible.builtin.copy:
+    src: "Dockerfile"
+    dest: /tmp/mariadb
+- name: Building docker image
+  community.docker.docker_image:
+    name: my_mariadb
+    build: 
+      path: /tmp/mariadb
+    source: build

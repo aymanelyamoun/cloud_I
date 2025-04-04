@@ -1,0 +1,13 @@
+- name: SECONDPLAY
+  hosts: vagrant_machines
+  become: true
+  roles:
+    - installdocker
+    - mariadb
+    - nginx
+    - wordpress
+    - compose
+    # - deploy
+  # tasks:
+  #   - name: TRY ME
+  #     ansible.builtin.ping:

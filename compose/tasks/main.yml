@@ -1,0 +1,18 @@
+---
+# tasks file for compose
+- name: Copy docker-compose file
+  ansible.builtin.copy:
+    src: "docker-compose.yaml"
+    dest: /home/inception/
+    # mode: "0755"
+- name: Copy .env
+  ansible.builtin.copy:
+    src: ".env"
+    dest: /home/inception/
+- name: RUN COMPOSE
+  community.docker.docker_compose_v2:
+    project_src: /home/inception/
+  register: output
+- name: Display output from docker-compose up
+  debug:
+    var: output
