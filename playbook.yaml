@@ -1,8 +1,11 @@
 - name: SECONDPLAY
-  hosts: vagrant_machines
+  hosts: all
   become: true
+  vars_files:
+    - secrets.yaml
   roles:
     - installdocker
+    # - registry
     - mariadb
     - nginx
     - wordpress

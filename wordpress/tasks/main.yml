@@ -1,17 +1,52 @@
 ---
 # tasks file for wordpress
+
 - name: Copy wordpress setup script
   ansible.builtin.copy:
     src: "set_up.sh"
-    dest: /tmp/wordpress/
-    mode: "0755"
+    dest: /home/inception/wordpress/
+
+- name: Copy php.ini
+  ansible.builtin.copy:
+    src: "php.ini"
+    dest: /home/inception/wordpress/
+
 - name: Copy wordpress Dockerfile
   ansible.builtin.copy:
     src: "Dockerfile"
-    dest: /tmp/wordpress/
-- name: build wordpress image
+    dest: /home/inception/wordpress/
+
+- name: Replace domain_name_holder with actual domain in the script
+  ansible.builtin.replace:
+    path: /home/inception/wordpress/set_up.sh
+    regexp: 'domain_name_holder'
+    replace: "{{ ansible_host }}"
+
+- name: Build wordpress image
   community.docker.docker_image:
     name: my_wordpress
     build:
-      path: /tmp/wordpress
+      path: /home/inception/wordpress
     source: build
+    tag: 1337
+
+
+# - name: Copy wordpress setup script
+#   ansible.builtin.copy:
+#     src: "set_up.sh"
+#     dest: /home/inception/wordpress/
+# - name: Copy wordpress setup script
+#   ansible.builtin.copy:
+#     src: "php.ini"
+#     dest: /home/inception/wordpress/
+# - name: Copy wordpress Dockerfile
+#   ansible.builtin.copy:
+#     src: "Dockerfile"
+#     dest: /home/inception/wordpress/
+# - name: build wordpress image
+#   community.docker.docker_image:
+#     name: my_wordpress
+#     build:
+#       path: /home/inception/wordpress
+#     source: build
+#     tag: 1337

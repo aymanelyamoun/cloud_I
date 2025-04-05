@@ -3,7 +3,7 @@ FROM alpine:latest
 RUN apk update && apk upgrade
 RUN apk add php php-fpm php-mysqli mysql-client php-phar php-cgi php-fileinfo php-json php-curl php-dom php-iconv php-session php-exif php-mbstring php-openssl php-xml php-tokenizer
 
-RUN apk add wget
+# RUN apk add wget
 RUN apk add curl
 
 RUN mkdir -p /usr/share/webapps/
@@ -17,10 +17,10 @@ RUN adduser -D -g 'www' www
 RUN chown -R www:www /var/www/
 
 RUN sed -i 's/listen = 127.0.0.1:9000/listen = 0.0.0.0:9000/g' /etc/php83/php-fpm.d/www.conf
-# COPY php.ini /etc/php83/conf.d/
+COPY php.ini /etc/php83/conf.d/
 EXPOSE 9000
 
-WORKDIR /var/www/wordpress
+WORKDIR /var/www/html
 RUN mkdir /var/run/php
 RUN chown -R www:www /var/run/php
 COPY set_up.sh set_up.sh

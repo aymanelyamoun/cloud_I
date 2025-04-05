@@ -1,9 +1,7 @@
-version: '3'
-
 services:
   mariadb:
-    # build: ./srcs/requirements/mariadb
-    image: my_mariadb
+    # build: ./mariadb
+    image: "my_mariadb:1337"
     container_name: db
     env_file: .env
     restart: always
@@ -20,8 +18,8 @@ services:
   wordpress:
     depends_on:
       - mariadb
-    # build: ./srcs/requirements/wordpress
-    image: my_wordpress
+    # build: ./wordpress
+    image: "my_wordpress:1337"
     container_name: my_wordpress
     env_file: .env
     restart: always
@@ -37,20 +35,22 @@ services:
       - USER_MAIL=usermail@gmail.com
       - USER_NAME=fuser
     volumes:
-      - wordpress:/var/www/wordpress
+      - wordpress:/var/www/html
     networks:
       - all_connect
   nginx:
     depends_on:
       - wordpress
-    # build: ./srcs/requirements/nginx
-    image: my_nginx
+    # build: ./nginx
+    image: "my_nginx:1337"
     container_name: website
     restart: always
     ports:
+      - 80:80
       - 443:443
     volumes:
-      - ${DATA_PATH}/wordpress:/var/www/wordpress
+      - ${DATA_PATH}/html:/var/www/html
+      # - ${DATA_PATH}/wordpress:/var/www/wordpress
     networks:
       - all_connect
 
@@ -59,7 +59,7 @@ volumes:
   wordpress:
     driver_opts:
       type: none
-      device: ${DATA_PATH}/wordpress
+      device: ${DATA_PATH}/html
       o: bind
   dbdata:
     driver_opts:

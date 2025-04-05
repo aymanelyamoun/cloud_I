@@ -1,6 +1,6 @@
 wp core download
 wp config create --dbname=$WORDPRESS_DB_NAME --dbuser=$WORDPRESS_USER --dbhost=$DB_HOST --dbpass=$WORDPRESS_PASS
-wp core install --url='192.168.56.110' --title="wordpress website" --admin_user=$ADMIN_USER_NAME --admin_password=$ADMIN_PASS --admin_email=$ADMIN_USER_MAIL --skip-email --allow-root
+wp core install --url='domain_name_holder' --title="wordpress website" --admin_user=$ADMIN_USER_NAME --admin_password=$ADMIN_PASS --admin_email=$ADMIN_USER_MAIL --skip-email --allow-root
 
 wp user create $USER_NAME $USER_MAIL --role=subscriber --user_pass=$USER_PASS
 

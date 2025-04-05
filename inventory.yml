@@ -1,8 +1,11 @@
 vagrant_machines:
   hosts:
     ael-yamoS:
-      ansible_host: 192.168.56.110
-      # ansible_python_interpreter: /usr/bin/python3
-  vars:
-    ansible_user: vagrant
-    ansible_ssh_private_key_file: .vagrant/machines/ael-yamoS/virtualbox/private_key
+      ansible_host: "{{secrets.host1.ip}}"
+      ansible_user: "{{secrets.host1.user}}"
+      ansible_ssh_private_key_file: "{{secrets.host1.private_key_file}}"
+    second-yamo:
+      ansible_host: "{{secrets.host2.ip}}"
+      ansible_user: "{{secrets.host2.user}}"
+      ansible_ssh_private_key_file: "{{secrets.host2.private_key_file}}"
+      # domain_name: "{{ secrets.host1.domain_name }}"

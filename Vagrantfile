@@ -1,6 +1,7 @@
 Vagrant.configure("2") do |config|
     #Server Node
     config.vm.define "ael-yamoS" do |server_conf|
+        # server_conf.vm.box = "bento/debian-11"
         server_conf.vm.box = "hashicorp/bionic64"
         # server_conf.vm.box = "hashicorp/bionic64"
         server_conf.vm.box_version = "1.0.282"

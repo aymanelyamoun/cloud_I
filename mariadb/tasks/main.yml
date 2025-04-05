@@ -4,14 +4,47 @@
 - name: Copying mariadb assest
   ansible.builtin.copy:
     src: "assets"
-    dest: /tmp/mariadb
+    dest: /home/inception/mariadb
 - name: Copying mariadb dockerfile
   ansible.builtin.copy:
     src: "Dockerfile"
-    dest: /tmp/mariadb
+    dest: /home/inception/mariadb
 - name: Building docker image
   community.docker.docker_image:
     name: my_mariadb
     build: 
-      path: /tmp/mariadb
+      path: /home/inception/mariadb
     source: build
+    tag: 1337
+
+# - name: Tag nginx image for local registry
+#   ansible.builtin.command:
+#     cmd: docker tag my_mariadb:latest localhost:5000/my_mariadb:latest
+
+# - name: Push nginx image to local registry
+#   community.docker.docker_image:
+#     name: localhost:5000/my_mariadb
+#     tag: latest
+#     push: yes
+
+# - name: Remove nginx image locally after push
+#   community.docker.docker_image:
+#     name: my_mariadb
+#     state: absent
+
+
+
+# - name: Copying mariadb assest
+#   ansible.builtin.copy:
+#     src: "assets"
+#     dest: /tmp/mariadb
+# - name: Copying mariadb dockerfile
+#   ansible.builtin.copy:
+#     src: "Dockerfile"
+#     dest: /tmp/mariadb
+# - name: Building docker image
+#   community.docker.docker_image:
+#     name: my_mariadb
+#     build: 
+#       path: /tmp/mariadb
+#     source: build
