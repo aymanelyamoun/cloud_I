@@ -12,7 +12,6 @@ RUN mysql_install_db --user=mysql --datadir=/var/lib/mysql
 
 EXPOSE 3306
 RUN chmod +x assets/replacer.sh
-RUN chmod +x assets/change_root_pass.sh
 RUN chmod +x assets/entrypoint.sh
 
 CMD assets/replacer.sh && assets/entrypoint.sh

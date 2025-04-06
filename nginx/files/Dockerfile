@@ -1,18 +1,22 @@
-FROM nginx:stable-alpine
+FROM debian:bullseye-slim
 
-# Install OpenSSL and bash (Alpine uses apk)
-RUN apk add --no-cache openssl bash
+RUN apt-get update && apt-get install -y \
+    nginx \
+    openssl \
+    bash \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
 
-# Copy config and setup scripts
+RUN mkdir -p /etc/nginx/ssl
+
 COPY assets /assets
 
-# Make scripts executable and run them
-RUN chmod +x /assets/*.sh && /assets/set_up_ssl_cert.sh && /assets/nginx_setup.sh
+RUN chmod +x /assets/*.sh \
+ && /assets/set_up_ssl_cert.sh \
+ && /assets/nginx_setup.sh
 
-# Expose HTTP and HTTPS
 EXPOSE 80 443
 
-# Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
 
 # FROM alpine:latest
