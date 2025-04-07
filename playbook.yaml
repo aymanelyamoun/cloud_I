@@ -1,16 +1,11 @@
-- name: SECONDPLAY
+- name: DEPLOY
   hosts: all
   become: true
   vars_files:
     - secrets.yaml
   roles:
     - installdocker
-    # - registry
     - mariadb
     - nginx
     - wordpress
     - compose
-    # - deploy
-  # tasks:
-  #   - name: TRY ME
-  #     ansible.builtin.ping:
