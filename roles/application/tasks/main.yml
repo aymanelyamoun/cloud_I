@@ -1,0 +1,29 @@
+---
+- name: Ensure database service directory exists
+  ansible.builtin.file:
+    path: "{{ app_root_dir }}/application"
+    state: directory
+    mode: "0755"
+
+- name: Copy application configuration files
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ app_root_dir }}/application/"
+  with_items:
+    - set_up.sh
+    - php.ini
+    - Dockerfile
+
+- name: Configure application with server domain
+  ansible.builtin.replace:
+    path: "{{ app_root_dir }}/application/set_up.sh"
+    regexp: 'domain_name_holder'
+    replace: "{{ server_domain | default(ansible_host) }}"
+
+- name: Build application image
+  community.docker.docker_image:
+    name: "{{ org_prefix }}_application"
+    build:
+      path: "{{ app_root_dir }}/application"
+    source: build
+    tag: "{{ image_tag }}"

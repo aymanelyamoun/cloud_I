@@ -1,0 +1,31 @@
+---
+- name: Ensure webserver service directory exists
+  ansible.builtin.file:
+    path: "{{ app_root_dir }}/webserver"
+    state: directory
+    mode: "0755"
+
+- name: Copy webserver configuration files
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ app_root_dir }}/webserver/"
+  loop:
+    - assets
+    - Dockerfile
+
+- name: Copy webserver configuration files
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ app_root_dir }}/webserver/{{ item.dest }}"
+    mode: "0644"
+  loop:
+    - { src: "default.conf.j2", dest: "default.conf" }
+
+
+- name: Build webserver image
+  community.docker.docker_image:
+    name: "{{ org_prefix }}_webserver"
+    build:
+      path: "{{ app_root_dir }}/webserver"
+    source: build
+    tag: "{{ image_tag }}"
