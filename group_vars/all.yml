@@ -2,7 +2,7 @@
 app_root_dir: "/opt/wordpress-stack"
 org_prefix: "1337"
 image_tag: "stable"
-server_domain: "165.227.160.71"
+server_domain: "_"
 
 # Database settings
 db_name: "wordpress_db"
