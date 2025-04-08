@@ -1,0 +1,15 @@
+---
+app_root_dir: "/opt/wordpress-stack"
+org_prefix: "1337"
+image_tag: "stable"
+server_domain: "63.33.61.153"
+
+# Database settings
+db_name: "wordpress_db"
+db_user: "wp_user"
+
+# Application settings
+admin_name: "admin"
+admin_email: "admin@example.com"
+user_name: "editor"
+user_email: "editor@example.com"

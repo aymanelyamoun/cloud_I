@@ -1,0 +1,84 @@
+services:
+  database:
+    image: "{{ org_prefix }}_database:{{ image_tag }}"
+    container_name: wp_database
+    env_file: .env
+    restart: always
+    environment:
+      - DB_NAME=$DB_NAME
+      - DB_USER=$DB_USER
+      - DB_PASSWORD=$DB_PASSWORD
+      - DB_ROOT_PASSWORD=$DB_ROOT_PASSWORD
+    volumes:
+      - database_data:/var/lib/mysql
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$DB_ROOT_PASSWORD"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+
+  application:
+    depends_on:
+      database:
+        condition: service_healthy
+    image: "{{ org_prefix }}_application:{{ image_tag }}"
+    container_name: wp_application
+    env_file: .env
+    restart: always
+    environment:
+      - DB_NAME=$DB_NAME
+      - DB_USER=$DB_USER
+      - DB_PASSWORD=$DB_PASSWORD
+      - DB_HOST=wp_database
+      - ADMIN_USER=$ADMIN_USER
+      - ADMIN_EMAIL=$ADMIN_EMAIL
+      - ADMIN_PASSWORD=$ADMIN_PASSWORD
+      - USER_NAME=$USER_NAME
+      - USER_EMAIL=$USER_EMAIL
+      - USER_PASSWORD=$USER_PASSWORD
+    volumes:
+      - application_data:/var/www/html
+    networks:
+      - backend
+      - frontend
+
+  webserver:
+    depends_on:
+      - application
+    image: "{{ org_prefix }}_webserver:{{ image_tag }}"
+    container_name: wp_webserver
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - application_data:/var/www/html:ro
+    networks:
+      - frontend
+    healthcheck:
+      test: ["CMD", "nginx", "-t"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  application_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${DATA_PATH}/application
+      o: bind
+  database_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${DATA_PATH}/database
+      o: bind
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge

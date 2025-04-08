@@ -1,0 +1,22 @@
+---
+- name: Ensure database service directory exists
+  ansible.builtin.file:
+    path: "{{ app_root_dir }}/database"
+    state: directory
+    mode: "0755"
+
+- name: Copy database configuration files
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ app_root_dir }}/database/"
+  loop:
+    - assets
+    - Dockerfile
+
+- name: Build database image
+  community.docker.docker_image:
+    name: "{{ org_prefix }}_database"
+    build: 
+      path: "{{ app_root_dir }}/database"
+    source: build
+    tag: "{{ image_tag }}"

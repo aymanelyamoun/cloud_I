@@ -1,0 +1,23 @@
+---
+- name: Copy orchestration configuration
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ app_root_dir }}/{{ item.dest }}"
+    mode: "0644"
+  loop:
+    - { src: "docker-compose.yml.j2", dest: "docker-compose.yml" }
+    - { src: "env.j2", dest: ".env" }
+
+- name: Ensure persistent data directories exist
+  ansible.builtin.file:
+    path: "{{ app_root_dir }}/data/{{ item }}"
+    state: directory
+    mode: "0755"
+  loop:
+    - database
+    - application
+
+- name: Deploy stack with Docker Compose
+  community.docker.docker_compose_v2:
+    project_src: "{{ app_root_dir }}/"
+    state: present

@@ -1,0 +1,13 @@
+---
+- name: Deploy Production WordPress Stack
+  hosts: all
+  become: true
+  vars_files:
+    - group_vars/all.yml
+    - group_vars/vault.yml
+  roles:
+    - docker
+    - database
+    - webserver
+    - application
+    - orchestration
