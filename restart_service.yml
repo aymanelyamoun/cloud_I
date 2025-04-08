@@ -1,0 +1,10 @@
+- name: Restart specific Docker Compose service
+  hosts: all
+  become: true
+  tasks:
+    - name: Restart a specific Docker Compose service
+      community.docker.docker_compose_v2:
+        project_src: "{{ app_root_dir }}"
+        state: restarted
+        pull: never
+        services: ["{{ service_name }}"]
