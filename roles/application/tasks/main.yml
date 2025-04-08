@@ -14,12 +14,6 @@
     - php.ini
     - Dockerfile
 
-- name: Configure application with server domain
-  ansible.builtin.replace:
-    path: "{{ app_root_dir }}/application/set_up.sh"
-    regexp: 'domain_name_holder'
-    replace: "{{ server_domain | default(ansible_host) }}"
-
 - name: Build application image
   community.docker.docker_image:
     name: "{{ org_prefix }}_application"

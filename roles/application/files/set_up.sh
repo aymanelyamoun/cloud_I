@@ -10,7 +10,7 @@ if [ -f "wp-config-sample.php" ] && [ ! -f "wp-config.php" ]; then
     
     # Install WordPress if not already installed
     if ! wp core is-installed --allow-root; then
-        wp core install --url='domain_name_holder' --title="WordPress Website" --admin_user=$ADMIN_USER --admin_password=$ADMIN_PASSWORD --admin_email=$ADMIN_EMAIL --skip-email --allow-root
+        wp core install --url=$DOMAIN_NAME --title="WordPress Website" --admin_user=$ADMIN_USER --admin_password=$ADMIN_PASSWORD --admin_email=$ADMIN_EMAIL --skip-email --allow-root
         wp user create $USER_NAME $USER_EMAIL --role=subscriber --user_pass=$USER_PASSWORD --allow-root
     fi
 else
