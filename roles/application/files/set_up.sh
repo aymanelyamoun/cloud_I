@@ -19,7 +19,7 @@ else
         wp core download --allow-root
         wp config create --dbname=$DB_NAME --dbuser=$DB_USER --dbhost=$DB_HOST --dbpass=$DB_PASSWORD --allow-root
         
-        wp core install --url='domain_name_holder' --title="WordPress Website" --admin_user=$ADMIN_USER --admin_password=$ADMIN_PASSWORD --admin_email=$ADMIN_EMAIL --skip-email --allow-root
+        wp core install --url=$DOMAIN_NAME --title="WordPress Website" --admin_user=$ADMIN_USER --admin_password=$ADMIN_PASSWORD --admin_email=$ADMIN_EMAIL --skip-email --allow-root
         wp user create $USER_NAME $USER_EMAIL --role=subscriber --user_pass=$USER_PASSWORD --allow-root
     else
         echo "WordPress is already installed."
