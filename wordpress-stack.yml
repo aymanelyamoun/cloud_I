@@ -6,8 +6,16 @@
     - group_vars/all.yml
     - group_vars/vault.yml
   roles:
-    - docker
-    - database
-    - webserver
-    - application
-    - orchestration
+    - {role: docker, tags: ['docker']}
+    - {role: database, tags: ['database']}
+    - {role: webserver, tags: ['webserver']}
+    - {role: application, tags: ['application']}
+    - {role: orchestration, tags: ['orchestration']}
+  tasks:
+    - name: Restart a specific Docker Compose service
+      community.docker.docker_compose_v2:
+        project_src: "{{ app_root_dir }}"
+        state: restarted
+        pull: never
+        services: ["{{ service_name }}"]
+      tags: [restart_service]
