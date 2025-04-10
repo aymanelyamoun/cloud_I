@@ -84,7 +84,7 @@ DB_PASSWORD: "{{ vault_db_password }}"
 2. **Run the Playbook**  
     Execute the playbook to deploy the stack:
     ```bash
-    ansible-playbook -i inventory.ini wordpress-stack.yml --ask-vault-pass
+    ansible-playbook -i inventory.ini wordpress-stack.yml  --skip-tags restart_service --ask-vault-pass
     ```
 
 3. **Access Your Site**  
@@ -92,7 +92,18 @@ DB_PASSWORD: "{{ vault_db_password }}"
     ```
     https://your-domain.com
     ```
+4. **Run services separatly**
+    execute this command and change the [service_name] with the desiered service
+    ```
+    ansible-playbook -i inventory.ini wordpress-stack.yml --tags [service_name] --ask-vault-pass
+    ```
+5. **Restart a service**
+    execute this command and change the [service_name] with the desiered service
+    ```
+    ansible-playbook -i inventory.ini wordpress-stack.yml --tags restart_service -e "service_name=[service_name]" --ask-vault-pass
+    ```
 
 ### SSL Certificate
 
 This deployment uses a self-signed SSL certificate for securing the Nginx webserver. While this provides encryption, it is not trusted by browsers by default. To avoid browser warnings, consider replacing the self-signed certificate with one from a trusted Certificate Authority (CA) like Let's Encrypt.
+
